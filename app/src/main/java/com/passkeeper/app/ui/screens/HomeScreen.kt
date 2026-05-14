@@ -32,7 +32,6 @@ val dummyData = listOf(
     PasswordItem(3, "Github", "zzyzs666", "G")
 )
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun HomeScreen(onNavigateToSettings: () -> Unit) {
     Scaffold(
