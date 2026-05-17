@@ -68,33 +68,31 @@ fun PasswordListContent(onNavigateToSettings: () -> Unit) {
     val focusManager = LocalFocusManager.current
 
     Column(Modifier.fillMaxSize()) {
-        Box(Modifier.padding(horizontal = 16.dp, vertical = 12.dp).fillMaxWidth()) {
-            SearchBar(
-                query = text,
-                onQueryChange = { text = it },
-                onSearch = { focusManager.clearFocus() },
-                active = active,
-                onActiveChange = { active = it },
-                placeholder = { Text("搜索密码", color = MaterialTheme.colorScheme.onSurfaceVariant) },
-                leadingIcon = {
-                    if (active) {
-                        IconButton(onClick = { 
-                            active = false
-                            text = ""
-                            focusManager.clearFocus()
-                        }) {
-                            Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
-                        }
-                    } else {
-                        IconButton(onClick = onNavigateToSettings) {
-                            Icon(Icons.Rounded.Menu, contentDescription = "Menu")
-                        }
+        SearchBar(
+            query = text,
+            onQueryChange = { text = it },
+            onSearch = { focusManager.clearFocus() },
+            active = active,
+            onActiveChange = { active = it },
+            placeholder = { Text("搜索密码", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+            leadingIcon = {
+                if (active) {
+                    IconButton(onClick = { 
+                        active = false
+                        text = ""
+                        focusManager.clearFocus()
+                    }) {
+                        Icon(Icons.Rounded.ArrowBack, contentDescription = "Back")
                     }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // Search suggestions drop down could go here
-            }
+                } else {
+                    IconButton(onClick = onNavigateToSettings) {
+                        Icon(Icons.Rounded.Menu, contentDescription = "Menu")
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            // Options could go here
         }
 
         // List with animations
