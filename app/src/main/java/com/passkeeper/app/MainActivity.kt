@@ -29,7 +29,33 @@ class MainActivity : ComponentActivity() {
                         composable("home") {
                             HomeScreen(onNavigateToSettings = { navController.navigate("settings") })
                         }
-                        composable("settings") {
+                        composable(
+                            route = "settings",
+                            enterTransition = {
+                                slideIntoContainer(
+                                    towards = androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Left,
+                                    animationSpec = androidx.compose.animation.core.tween(300)
+                                )
+                            },
+                            exitTransition = {
+                                slideOutOfContainer(
+                                    towards = androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Right,
+                                    animationSpec = androidx.compose.animation.core.tween(300)
+                                )
+                            },
+                            popEnterTransition = {
+                                slideIntoContainer(
+                                    towards = androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Right,
+                                    animationSpec = androidx.compose.animation.core.tween(300)
+                                )
+                            },
+                            popExitTransition = {
+                                slideOutOfContainer(
+                                    towards = androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection.Right,
+                                    animationSpec = androidx.compose.animation.core.tween(300)
+                                )
+                            }
+                        ) {
                             SettingsScreen(onNavigateBack = { navController.popBackStack() })
                         }
                     }
