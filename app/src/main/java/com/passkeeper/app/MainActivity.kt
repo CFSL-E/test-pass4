@@ -56,10 +56,66 @@ class MainActivity : ComponentActivity() {
                         }
                     ) {
                         composable("home") {
-                            HomeScreen(onNavigateToSettings = { navController.navigate("settings") })
+                            HomeScreen(
+                                onNavigateToSettings = { navController.navigate("settings") },
+                                onNavigateToAdd = { navController.navigate("add") },
+                                onNavigateToDetail = { id -> navController.navigate("detail/$id") }
+                            )
                         }
                         composable("settings") {
                             SettingsScreen(onNavigateBack = { navController.popBackStack() })
+                        }
+                        composable(
+                            route = "add",
+                            enterTransition = {
+                                androidx.compose.animation.scaleIn(initialScale = 0.8f, animationSpec = androidx.compose.animation.core.tween(300)) +
+                                    androidx.compose.animation.fadeIn(animationSpec = androidx.compose.animation.core.tween(300))
+                            },
+                            exitTransition = {
+                                androidx.compose.animation.scaleOut(targetScale = 0.8f, animationSpec = androidx.compose.animation.core.tween(300)) +
+                                    androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
+                            }
+                        ) {
+                            androidx.compose.material3.Scaffold(
+                                modifier = Modifier.fillMaxSize(),
+                                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
+                            ) { innerPadding ->
+                                androidx.compose.foundation.layout.Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding)
+                                        .androidx.compose.foundation.clickable { navController.popBackStack() },
+                                    contentAlignment = androidx.compose.ui.Alignment.Center
+                                ) {
+                                    androidx.compose.material3.Text("添加页面（点击返回）")
+                                }
+                            }
+                        }
+                        composable(
+                            route = "detail/{id}",
+                            enterTransition = {
+                                androidx.compose.animation.scaleIn(initialScale = 0.8f, animationSpec = androidx.compose.animation.core.tween(300)) +
+                                    androidx.compose.animation.fadeIn(animationSpec = androidx.compose.animation.core.tween(300))
+                            },
+                            exitTransition = {
+                                androidx.compose.animation.scaleOut(targetScale = 0.8f, animationSpec = androidx.compose.animation.core.tween(300)) +
+                                    androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
+                            }
+                        ) { backStackEntry ->
+                            androidx.compose.material3.Scaffold(
+                                modifier = Modifier.fillMaxSize(),
+                                containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
+                            ) { innerPadding ->
+                                androidx.compose.foundation.layout.Box(
+                                    modifier = Modifier
+                                        .fillMaxSize()
+                                        .padding(innerPadding)
+                                        .androidx.compose.foundation.clickable { navController.popBackStack() },
+                                    contentAlignment = androidx.compose.ui.Alignment.Center
+                                ) {
+                                    androidx.compose.material3.Text("详情页面 ID: ${backStackEntry.arguments?.getString("id")}（点击返回）")
+                                }
+                            }
                         }
                     }
                 }

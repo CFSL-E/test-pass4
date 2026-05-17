@@ -33,13 +33,17 @@ val dummyData = listOf(
 )
 
 @Composable
-fun HomeScreen(onNavigateToSettings: () -> Unit) {
+fun HomeScreen(
+    onNavigateToSettings: () -> Unit,
+    onNavigateToAdd: () -> Unit,
+    onNavigateToDetail: (Int) -> Unit
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { /* Add new password */ },
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
+                onClick = onNavigateToAdd,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                 shape = RoundedCornerShape(16.dp),
                 elevation = FloatingActionButtonDefaults.elevation(defaultElevation = 6.dp)
             ) {
@@ -54,7 +58,7 @@ fun HomeScreen(onNavigateToSettings: () -> Unit) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             Box(Modifier.weight(1f)) {
-                PasswordListContent(onNavigateToSettings)
+                PasswordListContent(onNavigateToSettings, onNavigateToDetail)
             }
         }
     }
@@ -62,7 +66,7 @@ fun HomeScreen(onNavigateToSettings: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordListContent(onNavigateToSettings: () -> Unit) {
+fun PasswordListContent(onNavigateToSettings: () -> Unit, onNavigateToDetail: (Int) -> Unit) {
     var text by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
@@ -75,6 +79,9 @@ fun PasswordListContent(onNavigateToSettings: () -> Unit) {
             active = active,
             onActiveChange = { active = it },
             placeholder = { Text("搜索密码", color = MaterialTheme.colorScheme.onSurfaceVariant) },
+            colors = SearchBarDefaults.colors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            ),
             leadingIcon = {
                 if (active) {
                     IconButton(onClick = { 
@@ -90,7 +97,9 @@ fun PasswordListContent(onNavigateToSettings: () -> Unit) {
                     }
                 }
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = if (active) 0.dp else 16.dp, vertical = if (active) 0.dp else 12.dp)
         ) {
             // Options could go here
         }
@@ -149,7 +158,7 @@ fun PasswordListContent(onNavigateToSettings: () -> Unit) {
                         animationSpec = tween(durationMillis = 400, delayMillis = index * 50, easing = FastOutSlowInEasing)
                     ) + fadeIn(animationSpec = tween(400))
                 ) {
-                    PasswordCard(item)
+                    PasswordCard(item, onClick = { onNavigateToDetail(item.id) })
                 }
             }
         }
@@ -157,45 +166,47 @@ fun PasswordListContent(onNavigateToSettings: () -> Unit) {
 }
 
 @Composable
-fun PasswordCard(item: PasswordItem) {
+fun PasswordCard(item: PasswordItem, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(24.dp))
-            .clickable { /* open detail */ },
+            .clickable { onClick() },
         color = MaterialTheme.colorScheme.surfaceContainer,
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = item.initial,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
-                )
-            }
-            Column(modifier = Modifier.padding(start = 16.dp).weight(1f)) {
+        ListItem(
+            headlineContent = {
                 Text(
                     text = item.title,
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Medium
                 )
+            },
+            supportingContent = {
                 Text(
                     text = item.subtitle,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    style = MaterialTheme.typography.bodyMedium
                 )
-            }
-        }
+            },
+            leadingContent = {
+                Box(
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primaryContainer),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = item.initial,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = androidx.compose.ui.graphics.Color.Transparent
+            )
+        )
     }
 }
