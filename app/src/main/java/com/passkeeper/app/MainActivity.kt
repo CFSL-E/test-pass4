@@ -4,8 +4,14 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
@@ -76,18 +82,18 @@ class MainActivity : ComponentActivity() {
                                     androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
                             }
                         ) {
-                            androidx.compose.material3.Scaffold(
+                            Scaffold(
                                 modifier = Modifier.fillMaxSize(),
                                 containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
                             ) { innerPadding ->
-                                androidx.compose.foundation.layout.Box(
+                                Box(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(innerPadding)
-                                        .androidx.compose.foundation.clickable { navController.popBackStack() },
-                                    contentAlignment = androidx.compose.ui.Alignment.Center
+                                        .clickable { navController.popBackStack() },
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    androidx.compose.material3.Text("添加页面（点击返回）")
+                                    Text("添加页面（点击返回）")
                                 }
                             }
                         }
@@ -102,18 +108,18 @@ class MainActivity : ComponentActivity() {
                                     androidx.compose.animation.fadeOut(animationSpec = androidx.compose.animation.core.tween(300))
                             }
                         ) { backStackEntry ->
-                            androidx.compose.material3.Scaffold(
+                            Scaffold(
                                 modifier = Modifier.fillMaxSize(),
                                 containerColor = androidx.compose.material3.MaterialTheme.colorScheme.surface
                             ) { innerPadding ->
-                                androidx.compose.foundation.layout.Box(
+                                Box(
                                     modifier = Modifier
                                         .fillMaxSize()
                                         .padding(innerPadding)
-                                        .androidx.compose.foundation.clickable { navController.popBackStack() },
-                                    contentAlignment = androidx.compose.ui.Alignment.Center
+                                        .clickable { navController.popBackStack() },
+                                    contentAlignment = Alignment.Center
                                 ) {
-                                    androidx.compose.material3.Text("详情页面 ID: ${backStackEntry.arguments?.getString("id")}（点击返回）")
+                                    Text("详情页面 ID: ${backStackEntry.arguments?.getString("id")}（点击返回）")
                                 }
                             }
                         }
